@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+        <head>
+                <title>User page</title>
+                <div th:replace="fragments/header :: header-css"/>
+        </head>
+        
+        <body>
+                <div th:replace="fragments/header :: header"></div>
+                
+                <a th:href="@{/}"> Go to main page</a>
+                
+                <div class="container">
+                        <div class="starter-template">
+                                <div class="col-xl-12">
+                                        <div class="row row-eq-height text-center text-lg-center">
+                                                <h2 class="text-info">Create order </h2>
+                                                <form action="#" th:action="@{/user/create}" th:object="${order}" method="post">
+                                                    <table class="table table-striped">
+                                                        <thead>
+                                                          <tr>
+                                                                <th class="text-secondary">Enter price
+                                                                </th>
+                                                                <th class="text-secondary">Enter note
+                                                                </th>
+                                                                <th class="text-secondary">Choose
+                                                                                           currency
+                                                                </th>
+                                                                <th class="text-secondary">Submit</th>
+                                                          </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                          <tr>
+                                                                <td><input th:field="*{price}" type="text" class="form-control form-control-lg rounded-0" name="price" id="price" required="true" placeholder="price"/></td>
+                                                                <td><input th:field="*{note}" type="text" class="form-control form-control-lg rounded-0" name="note" id="note" required="true" placeholder="note"/></td>
+                                                                <td><select th:field="*{currency}" class="form-control" id="currency" name="titles" required="true">
+                                                                        <option value="USD">USD</option>
+                                                                        <option value="EUR">EUR</option>
+                                                                        <option value="UAH">UAH</option>
+                                                                    </select>
+                                                                </td>
+                                                                <td>
+                                                                    <input type="hidden" th:field="*{user}"/>
+                                                                    <button type="submit" class="btn btn-primary btn-lg btn-block" id="submit-btn">Create order </button>
+                                                                </td>
+                                                          </tr>
+                                                        </tbody>
+                                                     </table>
+                                                </form>
+                                        </div>
+                                </div>
+                                
+                                
+                                <div class="col-xl-12">
+                                        <div class="row row-eq-height text-center text-lg-center">
+                                              <h2 class="text-info">Your orders :</h2>
+                                                <table class="table table-bordered">
+                                                   <thead>
+                                                        <tr class="text-secondary">
+                                                                <th>id</th>
+                                                                <th>Date</th>
+                                                                <th>Note</th>
+                                                                <th>Price</th>
+                                                                <th>Currency</th>
+                                                                <th>Status</th>
+                                                        </tr>
+                                                   </thead>
+                                                   <tbody id="body">
+                                                        <tr th:each="order : ${orders}" class="text-secondary">
+                                                                
+                                                                <td th:text="${order.id}"></td>
+                                                                <td th:text="${order.orderDate}"></td>
+                                                                <td th:text="${order.note}"></td>
+                                                                <td th:text="${order.price}"></td>
+                                                                <td th:text="${order.currency}"></td>
+                                                                <td th:text="${order.status}"></td>
+                                                        </tr>
+                                                   </tbody>
+                                                </table>
+                                        </div>
+                                </div>
+                                <!--Get by JSON-->
+                                <div class="col-xl-12">
+                                    <div class="row row-eq-height text-center text-lg-center">
+                                        <h2 class="text-info">Your orders by AJAX:
+                                                <button type="submit" class="btn btn-primary btn-lg" id="json-btn"> Get all orders</button>
+                                        </h2>
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr class="text-secondary">
+                                                        <th>id</th>
+                                                        <th>Date</th>
+                                                        <th>Note</th>
+                                                        <th>Price</th>
+                                                        <th>Currency</th>
+                                                        <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="body-json"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <hr/>
+                                <!--Get by XML-->
+                                <div class="col-xl-12">
+                                       <div class="row row-eq-height text-center text-lg-center">
+                                               <h2 class="text-info">Your orders by XML:
+                                                       <button type="submit" class="btn btn-primary btn-lg" id="xml-btn">Get all orders</button>
+                                               </h2>
+                                               
+                                               <textarea id="data-xml" class="form-control" rows="10"> </textarea>
+                                       </div>
+                               </div>
+                        </div>
+                </div>
+                
+                <div th:replace="fragments/header :: footer-js"></div>
+                <script  th:inline="javascript">
+                        /*<![CDATA[*/
+                 var userName = /*[[${#httpServletRequest.remoteUser}]]*/ null;
+                 $(function(){
+                         
+                              $('#json-btn').click(function (event) {
+                              event.preventDefault();
+
+                         
+
+                              $.ajax({
+                              type: "GET",
+                              url: "/user/"+userName+"/all",
+                              dataType: 'json',
+                              timeout: 600000,
+                              success: function (data) {
+                                     parseJSON(data)();
+                              },
+                              error: function (e) {
+                                     var json = e.responseText;
+                                     $('#body-json').html(json);
+                                 }
+                              });
+                            });
+                         
+                         
+                         $('#xml-btn').click(function (event) {
+                         event.preventDefault();
+
+                         $.ajax({
+                         type: "GET",
+                         url: "/user/"+userName+"/allXML",
+                         dataType: 'html',
+                         timeout: 600000,
+                         success: function (data) {
+                                 $('#data-xml').html(data);
+                         },
+                         error: function (e) {
+                                var error = e.responseText;
+                                $('#data-xml').html(error);
+                            }
+                         });
+                       });
+                 });
+                        function parseJSON(json) {
+                             var arr=[];
+                             var rez='';
+                             $.each(json.content, function (i, v) {
+                               arr[i] ="<tr  class='text-secondary'>"
+                                       +"<th>" +v.id + "</th>"
+                                       +"<th>" +v.orderDate + "</th>"
+                                       +"<th>" +v.note + "</th>"
+                                       +"<th>" +(parseFloat(v.price) )+ "</th>"
+                                       +"<th>" +v.currency + "</th>"
+                                       +"<th>" +v.status + "</th>"
+                                       +"</tr>";
+                               });
+                                   for (var j in arr) {
+                                      rez += arr[j];
+                                   }
+                                   $('#body-json').html(rez);
+                           }
+                        /*]]>*/
+                </script>
+        </body>
+</html>

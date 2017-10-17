@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Sign Up</title>
+        <div th:replace="fragments/header :: header-css"/>
+    </head>
+    
+    <body class="bg-info">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 class="text-center text-white mb-4">Register form</h2>
+                    <div class="row">
+                        <div class="col-md-6 mx-auto">
+                            <span class="anchor" ></span>
+                            <!-- form card login -->
+                            <div class="card rounded-0">
+                                <div class="card-header">
+                                    <h3 class="mb-0" id="feedback"></h3>
+                                </div>
+                                <div class="card-body">
+                                    <form  action="#" th:action="@{/signup}" th:object="${user}" method="post"  class="form" role="form" autocomplete="off" id="form-Login">
+                                            <div  th:if="${#fields.hasErrors('username')}" th:errors="*{username}">
+                                                 <div class="alert alert-danger">Username is used. Please try again </div>
+                                            </div>
+                                        <div class="form-group">
+                                            <label for="firstName">First Name</label>
+                                            <input th:field="*{firstName}" type="text" class="form-control form-control-lg rounded-0" name="firstName" id="firstName" required=""/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Last Name</label>
+                                            <input type="text" th:field="*{lastName}" class="form-control form-control-lg rounded-0" id="lastName" required="" autocomplete="lastName" name="lastName"/>
+                                        </div>
+                                        <div class="form-group">
+                                             <label>Date of Birth</label>
+                                             <input type="text" th:field="*{dateOfBirth}" class="form-control form-control-lg rounded-0" id="dateOfBirth" required="" autocomplete="Date of Birth" name="dateOfBirth"/>
+                                        </div>
+                                        <div class="form-group">
+                                        	<label class="radio-inline">
+                                        	      <input type="radio" th:field="*{gender}" value="MALE" />Male
+                                        	</label>
+                                        	<label class="radio-inline">
+                                                  <input type="radio" th:field="*{gender}" value="FEMALE" />Female
+                                        	</label>
+                                        	<p th:errors="*{gender}" class="help-block"></p>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                             <label>Individual number(INN)</label>
+                                            <input type="text" th:field="*{individualNumber}" class="form-control form-control-lg rounded-0" id="individualNumber" required="" name="individualNumber"/>
+                                            
+                                        </div>
+                                        <div class="form-group">
+                                            <label >Login</label>
+                                            <input th:field="*{username}" type="text" class="form-control form-control-lg rounded-0" id="username" name="username" required="" autocomplete="new-password"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Password</label>
+                                            <input th:field="*{password}" type="password" class="form-control form-control-lg rounded-0" id="password" name="password" required="" autocomplete="new-password"/>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-primary btn-lg float-right"  id="bth-submit">Register</button>
+                                            <span th:utext="${successMessage}"></span>
+                                    </form>
+                                </div>
+                                <!--/card-block-->
+                            </div>
+                            <!-- /form card login -->
+                        </div>
+                    </div>
+                    <!--/row-->
+                </div>
+                <!--/col-->
+            </div>
+            <!--/row-->
+        </div>
+        <!--/container-->
+    </body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+        <head>
+                <title>Title</title>
+                <div th:fragment="header-css">
+                        <link type="text/css" rel="stylesheet" href="/webjars/bootstrap/4.0.0-beta/css/bootstrap.min.css"/>
+                        <link rel="stylesheet" type="text/css" href="../../static/css/styles.css" th:href="@{/css/styles.css}"/>
+                        <link type="text/css" rel="stylesheet" href="/webjars/datatables/1.10.15/css/jquery.dataTables.min.css"/>
+                        
+                </div>
+        </head>
+        <body>
+                <div th:fragment="header">
+                        <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse fixed-top bg-info">
+                            <div class="row">
+                                <div sec:authorize="isAnonymous()" >
+                                     <div >
+                                          <a class="navbar-brand text-white" th:href="@{/login}">Sign in</a>
+                                          <a class="navbar-brand text-white" th:href="@{/signup}">Sign up</a>
+                                             <p class="navbar-brand text-danger" th:text="${param.msg[0]}" th:unless="${param.msg == null}"></p>
+                                     </div>
+                                </div>
+                                <div sec:authorize="isAuthenticated()">
+                                         <a class="navbar-brand text-white" th:href="@{/logout}">Log out</a>
+                                         <span class="navbar-brand  text-primary " th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</span>
+                                </div>
+                            </div>
+                        </nav>
+                </div>
+                
+                <div th:fragment="footer-js">
+                    <script type="text/javascript" src="/webjars/jquery/3.2.1/jquery.min.js"></script>
+                    <script type="text/javascript" src="/webjars/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+                    <script type="text/javascript" src="/webjars/datatables/1.10.15/js/jquery.dataTables.min.js"></script>
+                        
+                </div>
+        </body>
+</html>

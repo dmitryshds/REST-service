@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+        <head>
+                <title>Admin details</title>
+                <div th:include="fragments/header :: header-css"></div>
+        </head>
+        
+        <body>
+                <div th:include="fragments/header :: header"></div>
+                <a th:href="@{/admin}"> Go to admin page</a>
+                <div class="container">
+                        <div class="starter-template">
+                                <h1 class="text-info">User name : <span th:text="${user.username}"></span></h1>
+                                <form th:action="@{/admin/{id}/details(id=${user.id})}" method="post">
+                                        <table id="example" class="display" cellspacing="0" width="100%">
+                                                <thead>
+                                                        <tr>
+                                                                <th>Id</th>
+                                                                <th>First name</th>
+                                                                <th>Last name</th>
+                                                                <th>Date of birth</th>
+                                                                <th>Gender</th>
+                                                                <th>Login name</th>
+                                                                <th>Individual number</th>
+                                                                <th>Enabled</th>
+                                                                <th>Edit</th>
+                                                                <th>Delete</th>
+                                                        </tr>
+                                                </thead>
+                                                <tfoot>
+                                                        <tr>
+                                                                <th>Id</th>
+                                                                <th>First name</th>
+                                                                <th>Last name</th>
+                                                                <th>Date of birth</th>
+                                                                <th>Gender</th>
+                                                                <th>Login name</th>
+                                                                <th>Individual number</th>
+                                                                <th>Enabled</th>
+                                                                <th>Edit</th>
+                                                                <th>Delete</th>
+                                                        </tr>
+                                                </tfoot>
+                                                <tbody>
+                                                        <tr>
+                                                                <td th:text="${user.id}"></td>
+                                                                <td th:text="${user.firstName}"></td>
+                                                                <td th:text="${user.lastName}"></td>
+                                                                <td th:text="${user.dateOfBirth}"></td>
+                                                                <td th:text="${user.gender}"></td>
+                                                                <td th:text="${user.username}"></td>
+                                                                <td th:text="${user.individualNumber}"></td>
+                                                                <td th:text="${user.enabled}"></td>
+                                                                <td>
+                                                                        <button type="button" class="btn btn-warning btn-md" id="edit-btn">
+                                                                                EDIT
+                                                                        </button>
+                                                                </td>
+                                                                <td>
+                                                                        <input type="submit" class="btn btn-danger btn-md" id="delete-btn" name="action" value="DELETE"/>
+                                                                </td>
+                                                        </tr>
+                                                        <tr id="user-edit" style="display: none;">
+                                                                <td th:text="${user.id}"></td>
+                                                                <td th:text="${user.firstName}"></td>
+                                                                <td th:text="${user.lastName}"></td>
+                                                                <td th:text="${user.dateOfBirth}"></td>
+                                                                <td th:text="${user.gender}"></td>
+                                                                <td th:text="${user.username}"></td>
+                                                                <td th:text="${user.individualNumber}"></td>
+                                                                <td>
+                                                                        <select class="input-medium" id="" name="enabled" required="true">
+                                                                                <option value="true" class="text-bold">
+                                                                                        Enabled
+                                                                                </option>
+                                                                                <option value="false" class="text-bold">
+                                                                                        Disabled
+                                                                                </option>
+                                                                        </select>
+                                                                </td>
+                                                                <td>
+                                                                        <input type="submit" class="btn btn-warning btn-md" name="action" value="SUBMIT"/>
+                                                                </td>
+                                                                <td>
+                                                                        <button type="button" class="btn btn-success btn-md" id="cancel-btn">
+                                                                                CANCEL
+                                                                        </button>
+                                                                </td>
+                                                        </tr>
+                                                </tbody>
+                                        </table>
+                                </form>
+                                <hr/>
+                                <!--ORDERS-->
+                                <h1 class="text-info">User orders :</h1>
+                                <table id="orders" class="display" cellspacing="0" width="100%">
+                                        <thead>
+                                                <tr>
+                                                        <th>id</th>
+                                                        <th>Date</th>
+                                                        <th>Note</th>
+                                                        <th>Price</th>
+                                                        <th>Currency</th>
+                                                        <th>Status</th>
+                                                        <th>Edit</th>
+                                                        <th>Delete</th>
+                                                </tr>
+                                        </thead>
+                                        <tfoot>
+                                                <tr>
+                                                        <th>id</th>
+                                                        <th>Date</th>
+                                                        <th>Note</th>
+                                                        <th>Price</th>
+                                                        <th>Currency</th>
+                                                        <th>Status</th>
+                                                        <th>Edit</th>
+                                                        <th>Delete</th>
+                                                
+                                                </tr>
+                                        </tfoot>
+                                        <tbody>
+                                                <tr th:each="order : ${user.orderList}" class="text-secondary">
+                                                        <form th:action="@{/admin/details/edit}" method="post">
+                                                                <td th:text="${order.id}"></td>
+                                                                <td th:text="${order.orderDate}"></td>
+                                                                <td>
+                                                                        <input type="text" th:value="${order.note}" name="note"/>
+                                                                </td>
+                                                                <td>
+                                                                        <input type="text" th:value="${order.price}" name="price"/>
+                                                                </td>
+                                                                <td>
+                                                                        <input type="text" th:value="${order.currency}" name="currency"/>
+                                                                </td>
+                                                                <td>
+                                                                        <select class="input-medium" name="stat">
+                                                                                <option th:text="${order.status}" th:value="${order.status}" selected="selected"></option>
+                                                                                <option th:if="${order.status == T(biz.bagira.shds.entities.Status).DONE}" value="NOT_DONE">
+                                                                                        NOT_DONE
+                                                                                </option>
+                                                                                <option th:if="${order.status == T(biz.bagira.shds.entities.Status).NOT_DONE}" value="DONE">
+                                                                                        DONE
+                                                                                </option>
+                                                                        </select>
+                                                                
+                                                                </td>
+                                                                <td>
+                                                                        <input type="hidden" name="userId" th:value="${order.user.id}"/>
+                                                                        <input type="hidden" name="id" th:value="${order.id}"/>
+                                                                        <input type="submit" class="btn btn-warning btn-md" name="action" value="EDIT"/>
+                                                                
+                                                                </td>
+                                                                <td>
+                                                                        <input type="submit" class="btn btn-danger btn-md" name="action" value="DELETE"/>
+                                                                </td>
+                                                        </form>
+                                                </tr>
+                                        </tbody>
+                                </table>
+                        </div>
+                </div>
+                
+                <div th:replace="fragments/header :: footer-js"></div>
+                <script th:inline="javascript">
+                        /*<![CDATA[*/
+                        $(document).ready(function () {
+                                
+                                $('#example').DataTable();
+                                
+                                $('#orders').DataTable();
+                                
+                                $('#example_info').hide();
+                                $('#example_length').hide();
+                                $('#example_filter').hide();
+                                $('#example_paginate').hide();
+                                
+                                $('#orders_info').hide();
+                                $('#orders_length').hide();
+                                $('#orders_filter').hide();
+                                $('#orders_paginate').hide();
+                                
+                                
+                                $('#edit-btn').click(function (event) {
+                                        event.preventDefault();
+                                        $('#user-edit').removeAttr('style');
+                                        $('#edit-btn').hide();
+                                        $('#delete-btn').hide();
+                                });
+                                
+                                $('#cancel-btn').click(function (event) {
+                                        $('#edit-btn').show();
+                                        $('#delete-btn').show();
+                                        $('#user-edit').attr('style', 'display: none;');
+                                });
+                        });
+                        
+                        /*]]>*/
+                </script>
+        </body>
+</html>

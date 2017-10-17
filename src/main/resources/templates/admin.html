@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Admin page</title>
+        <div th:replace="fragments/header :: header-css"/>
+		
+    </head>
+    <body>
+		<div th:replace="fragments/header :: header"></div>
+		        
+        <a th:href="@{/}"> Go to main page</a>
+        <div class="container">
+            <div class="starter-template">
+                <h1 class="text-info">All users :</h1>
+                     <table id="example" class="display" cellspacing="0" width="100%">
+                         <thead>
+                             <tr>
+                                 <th>Id</th>
+                                 <th>First name</th>
+                                 <th>Last name</th>
+                                 <th>Date of birth</th>
+                                 <th>Gender</th>
+                                 <th>Login name</th>
+                                 <th>Individual number</th>
+                                 <th>Enabled</th>
+                                 <th>Edit</th>
+                             </tr>
+                         </thead>
+                         <tfoot>
+                             <tr>
+                                 <th>Id</th>
+                                 <th>First name</th>
+                                 <th>Last name</th>
+                                 <th>Date of birth</th>
+                                 <th>Gender</th>
+                                 <th>Login name</th>
+                                 <th>Individual number</th>
+                                 <th>Enabled</th>
+                                 <th>Edit</th>
+                             </tr>
+                         </tfoot>
+                         <tbody>
+                             <tr th:each="user : ${users}">
+                                 <td th:text="${user.id}"></td>
+                                 <td th:text="${user.firstName}"></td>
+                                 <td th:text="${user.lastName}"></td>
+                                 <td th:text="${user.dateOfBirth}"></td>
+                                 <td th:text="${user.gender}"></td>
+                                 <td th:text="${user.username}"></td>
+                                 <td th:text="${user.individualNumber}"></td>
+                                 <td th:text="${user.enabled}"></td>
+                                 <td ><a th:href="@{/admin/details(id=${user.id})}">EDIT</a></td>
+                             </tr>
+                         </tbody>
+                      </table>
+                      <hr/>
+                <!--Orders table-->
+                <h1 class="text-info">All orders :</h1>
+                   <table id="orders" class="display" cellspacing="0" width="100%">
+                       <thead>
+                           <tr>
+                               <th>id</th>
+                               <th>Date</th>
+                               <th>Note</th>
+                               <th>Price</th>
+                               <th>Currency</th>
+                               <th>Status</th>
+                               <th>User login </th>
+                           </tr>
+                       </thead>
+                       <tfoot>
+                          <tr>
+                               <th>id</th>
+                               <th>Date</th>
+                               <th>Note</th>
+                               <th>Price</th>
+                               <th>Currency</th>
+                               <th>Status</th>
+                               <th>User login </th>
+                          </tr>
+                       </tfoot>
+                            <tbody>
+                               <tr th:each="order : ${orders}" class="text-secondary">
+                                       <td th:text="${order.id}"></td>
+                                       <td th:text="${order.orderDate}"></td>
+                                       <td th:text="${order.note}"></td>
+                                       <td th:text="${order.price}"></td>
+                                       <td th:text="${order.currency}"></td>
+                                       <td th:text="${order.status}"></td>
+                                       <td th:text="${order.user.username}"></td>
+                               </tr>
+                           </tbody>
+                       </table>
+            </div>
+        </div>
+   
+	    <div th:replace="fragments/header :: footer-js"></div>
+        <script th:inline="javascript"  >
+                /*<![CDATA[*/
+                $(document).ready(function () {
+                    $('#example').DataTable();
+                    $('#orders').DataTable();
+                });
+                /*]]>*/
+        </script>
+    </body>
+</html>
